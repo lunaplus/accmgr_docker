@@ -1,0 +1,37 @@
+version: "3.7"
+
+services:
+  httpd:
+    container_name: ${HTTPD_NAME:-httpd_rvm}
+    restart: always
+    build:
+      context: ./dfile_httpd
+      dockerfile: Dockerfile
+    ports:
+      - 18080:80
+#    depends_on:
+#      - mariadb
+    volumes:
+      - ${ACCMGR_PATH:-.}/httpd_conf.d/accmgr.conf:/usr/local/apache2/conf.d/accmgr.conf
+      - ${ACCMGR_PATH:-.}/vol_accmgr_src/accmgr:/usr/local/apache2/htdocs/accmgr
+  mariadb:
+    container_name: ${MARIADB_NAME:-mariadb}
+#    image: mariadb:10.3.11
+    command: mysqld --character-set-server=utf8mb4 --default-authentication-plugin=mysql_native_password
+    restart: always
+    build:
+      context: ./dfile_mariadb
+      dockerfile: Dockerfile
+#    ports:
+#      - 13306:3306
+    environment:
+      TZ: ${TZ}
+      MYSQL_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWD}
+      MYSQL_DATABASE: ${MARIADB_DATABASE}
+      MYSQL_HOST: ${MARIADB_HOST}
+      MYSQL_USER: ${MARIADB_USER_NAME}
+      MYSQL_PASSWORD: ${MARIADB_USER_PASSWORD}
+    volumes:
+      - ${ACCMGR_PATH:-.}/mariadb:/var/lib/mysql
+      - ${ACCMGR_PATH:-.}/mariadb_conf/mymy.cnf:/etc/mysql/conf.d/mymy.cnf
+

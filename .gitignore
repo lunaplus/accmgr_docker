@@ -1,0 +1,6 @@
+.env
+dfile_mariadb/initdb.d/*
+mariadb/*
+vol_accmgr_src/*
+!.gitkeep
+
