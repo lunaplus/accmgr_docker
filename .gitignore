@@ -2,5 +2,6 @@
 dfile_mariadb/initdb.d/*
 mariadb/*
 vol_accmgr_src/*
+vol_hiki/*
 !.gitkeep
 

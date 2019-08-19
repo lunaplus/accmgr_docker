@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   httpd:
-    container_name: ${HTTPD_NAME:-httpd_rvm}
+    container_name: ${HTTPD_NAME:-httpd}
     restart: always
     build:
       context: ./dfile_httpd
@@ -12,8 +12,10 @@ services:
 #    depends_on:
 #      - mariadb
     volumes:
-      - ${ACCMGR_PATH:-.}/httpd_conf.d/accmgr.conf:/usr/local/apache2/conf.d/accmgr.conf
+      - ${ACCMGR_PATH:-.}/httpd_conf.d:/usr/local/apache2/conf.d
       - ${ACCMGR_PATH:-.}/vol_accmgr_src/accmgr:/usr/local/apache2/htdocs/accmgr
+      - ${ACCMGR_PATH:-.}/vol_hiki/src/hiki:/usr/local/apache2/htdocs/hiki
+      - ${ACCMGR_PATH:-.}/vol_hiki/data/hikidata:/var/local/hikidata
   mariadb:
     container_name: ${MARIADB_NAME:-mariadb}
 #    image: mariadb:10.3.11

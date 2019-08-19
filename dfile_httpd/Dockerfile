@@ -17,7 +17,11 @@ RUN curl -sSL https://rvm.io/pkuczynski.asc | gpg --import -
 RUN curl -sSL https://get.rvm.io | bash -s stable
 RUN /bin/bash -l -c "/etc/profile.d/rvm.sh && rvm requirements"
 
+# =============================================================================
+# install rubies
+# =============================================================================
 RUN /bin/bash -l -c "/etc/profile.d/rvm.sh && rvm install ruby-2.4 && rvm 2.4 && rvm gemset create accmgr && rvm 2.4@accmgr && gem install mysql2"
+RUN /bin/bash -l -c "/etc/profile.d/rvm.sh && rvm pkg install openssl && rvm install ruby-1.8 --with-openssl-dir=/usr/local/rvm/usr"
 
 # =============================================================================
 # setup for apache
@@ -28,9 +32,10 @@ RUN sed -i '/LoadModule rewrite_module/s/^#//g' /usr/local/apache2/conf/httpd.co
 RUN sed -i '/LoadModule cgid_module/s/#Load/Load/g' /usr/local/apache2/conf/httpd.conf
 RUN sed -i '/LoadModule cgi_module/s/#Load/Load/g' /usr/local/apache2/conf/httpd.conf
 
-RUN mkdir -p /var/log/apache2/
-RUN sed -i '/ErrorLog \/proc\/self\/fd\/2/s//ErrorLog \/var\/log\/apache2\/error.log/g' /usr/local/apache2/conf/httpd.conf
-RUN sed -i '/CustomLog \/proc\/self\/fd\/1 common/s//CustomLog \/var\/log\/apache2\/access.log common/g' /usr/local/apache2/conf/httpd.conf
+# optional : logging on logfile
+#RUN mkdir -p /var/log/apache2/
+#RUN sed -i '/ErrorLog \/proc\/self\/fd\/2/s//ErrorLog \/var\/log\/apache2\/error.log/g' /usr/local/apache2/conf/httpd.conf
+#RUN sed -i '/CustomLog \/proc\/self\/fd\/1 common/s//CustomLog \/var\/log\/apache2\/access.log common/g' /usr/local/apache2/conf/httpd.conf
 
 EXPOSE 80
 
